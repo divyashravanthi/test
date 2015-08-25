@@ -1,0 +1,4 @@
+<% @requests.each do |request| %>
+	<%=request.user.email%>
+	 <a href="/message/<%=request.id%>"> Start chatting</a><br/>
+<% end %>

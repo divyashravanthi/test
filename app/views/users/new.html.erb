@@ -1,0 +1,7 @@
+<h1>Welcome to Blint!</h1>
+<%= form_for @user do |f| %>
+  <%= f.text_field :name, :placeholder => 'Name' %>
+  <%= f.email_field :email, :placeholder => 'Email' %>
+  <%= f.text_field :role, :placeholder => 'Role (Client/Coach)'%>
+  <%= f.submit "Create" %>
+<% end %>

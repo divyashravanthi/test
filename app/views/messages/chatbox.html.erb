@@ -1,0 +1,42 @@
+<div class="chat_container">
+  <div id="chat_room">
+    <p class="alert"> Start chatting! </p>
+    <%@request.messages.each do |m|%>
+      <p><%User.find(m.sender_id).name%></p>
+    <%end%>
+  </div>
+ 
+  <form id="new_message_form">
+    <input type="text" id="message" name="message">
+    <input type="submit" value="Send">
+  </form>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	var public_subscription = client.subscribe("/messages/<%=@request.id%>", function(data) {
+      $('<p></p>').html(data.sender + ": " + data.msg).appendTo('#chat_room');
+    });
+	$('#new_message_form').submit(function(){
+      $.ajax({
+        url: "/new-message",
+        type: "POST",
+        data: {
+          msg: $('#message').val(), 
+          request_id: <%=@request.id%>, 
+          sender_id: <%=session[:user_id]%>},
+        success: function(){
+          // Publish the message to the public channel after a successful entry to the database
+          client.publish("/messages/<%=@request.id%>", {
+            msg: $('#message').val(),
+            sender: "<%=User.find(session[:user_id]).name%>"
+          });
+          // Clear the message box
+          $('#message').val('');
+        }
+      });
+ 
+      // Don't actually submit the form, otherwise the page will refresh.
+      return false;
+    });
+});
+</script>

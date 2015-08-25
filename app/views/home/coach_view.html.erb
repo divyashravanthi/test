@@ -1,0 +1,3 @@
+<% @requests.each do |req|%>
+<p><%= req.user.name %><br/><%= link_to "Accept Request", accept_request_path(:id => req.id)%></p>
+<% end %> 

@@ -1,0 +1,8 @@
+<% @coaches.each do |coach|%>
+<%= coach.name %><br/>
+	<%= form_for Request.new do |f| %>
+		<%= f.hidden_field :sender_id, :value => @user.id %>
+		<%= f.hidden_field :receiver_id, :value => coach.id %>
+		<%= f.submit "Send Request"%>
+	<% end %>
+<% end%> 
