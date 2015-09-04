@@ -1,4 +1,8 @@
 <% @requests.each do |request| %>
-	<%=request.user.email%>
+	<% if @client %>
+		<%= User.find(request.receiver_id).email %>
+	<% else %>
+		<%=request.user.email%>
+	<% end %>
 	 <a href="/message/<%=request.id%>"> Start chatting</a><br/>
 <% end %>

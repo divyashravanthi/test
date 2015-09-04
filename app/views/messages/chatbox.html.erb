@@ -1,33 +1,91 @@
 <div class="chat_container">
-  <div id="chat_room">
-    <p class="alert"> Start chatting! </p>
-    <%@request.messages.each do |m|%>
-      <p><%User.find(m.sender_id).name%></p>
-    <%end%>
-  </div>
- 
-  <form id="new_message_form">
-    <input type="text" id="message" name="message">
-    <input type="submit" value="Send">
-  </form>
+  
 </div>
+
+<br/>
+
+<div id="wrapper">
+      <div class="message-container">
+        <br/>
+        <div class="message-north">
+          <ul class="message-user-list">
+            <% @requests.each do |request| %>
+            <li class="row">
+              <a href="/message/<%=request.id%>" class="requests" data-id="<%=request.id%>">
+                <span class="user-img"></span>
+                <% if @client %>
+                  <span class="user-title"><%=User.find(request.receiver_id).name%></span>
+                  <p class="user-desc"><%=User.find(request.receiver_id).email%></p>
+                <% else %>
+                  <span class="user-title"><%=request.user.name%></span>
+                  <p class="user-desc"><%=request.user.email%></p>
+                <% end %>
+              </a>
+            </li><br/>
+            <% end %>
+          </ul>
+          <div class="message-thread">
+            <% @request.messages.each do |m| %>
+            <% if User.find(session[:user_id]).name == m.sender_name %>
+              <div class="message bubble-right">
+            <% else %>
+              <div class="message bubble-left">
+            <% end %>
+                <label class="message-user"><%=m.sender_name%></label>
+                <label class="message-timestamp"><%=time_ago_in_words(m.created_at)%> ago</label>
+                <p><%=m.raw_text%></p>
+              </div>
+            <% end %>
+          </div>
+          
+        </div>
+        <div class="message-south">
+          <div class="typing-container"><div class="typing-sign">Now typing....</div></div>
+          <form id="new_message_form" data-request="<%=@request.id%>">
+          <textarea cols="20" rows="3" id="message" name="message"></textarea>
+          <input type="submit" value="Send" class="btn btn-primary pull-right" style="
+          height: 85px;">
+          </form>
+        </div>
+      </div>
+    </div>
+
 <script type="text/javascript">
 $(document).ready(function(){
+  var user_flag = 0;
 	var public_subscription = client.subscribe("/messages/<%=@request.id%>", function(data) {
-      $('<p></p>').html(data.sender + ": " + data.msg).appendTo('#chat_room');
+      if(data.signal == "typing" && user_flag == 0){
+        console.log("here");
+        $(".typing-sign").show();
+        setTimeout(function(){ $(".typing-sign").hide() }, 2000);
+      }
+      else if(data.msg){
+        var new_msg = "";
+        if(data.sender == "<%= User.find(session[:user_id]).name%>"){
+          new_msg+= '<div class="message bubble-right">';
+        }
+        else{
+          new_msg+= '<div class="message bubble-left">';
+        }
+        new_msg += '<label class="message-user">'+data.sender+'</label><label class="message-timestamp">'+$.timeago(data.msg.created_at)+'</label><p>'+data.msg.raw_text+'</p></div>'
+        $(".message-thread").append(new_msg);
+        // $('<p></p>').html(data.sender + ": " + data.msg).appendTo('#chat_room');
+      }
     });
 	$('#new_message_form').submit(function(){
+      var request_id = $(this).data('request');
+      console.log(request_id);
       $.ajax({
         url: "/new-message",
         type: "POST",
         data: {
           msg: $('#message').val(), 
-          request_id: <%=@request.id%>, 
-          sender_id: <%=session[:user_id]%>},
-        success: function(){
+          request_id: request_id, 
+          sender_id: "<%=session[:user_id]%>"},
+        success: function(data){
           // Publish the message to the public channel after a successful entry to the database
-          client.publish("/messages/<%=@request.id%>", {
-            msg: $('#message').val(),
+          client.publish("/messages/"+request_id, {
+            msg: data,
             sender: "<%=User.find(session[:user_id]).name%>"
           });
           // Clear the message box
@@ -38,5 +96,18 @@ $(document).ready(function(){
       // Don't actually submit the form, otherwise the page will refresh.
       return false;
     });
+
+  //Typing event
+  $("#message").keyup(function(){
+    console.log("here");
+      if($(".typing-sign").css('display') == "none"){
+        client.publish("/messages/<%=@request.id%>", {
+                signal: "typing"
+              });
+        user_flag = 1;
+      }
+      setTimeout(function(){ user_flag = 0; }, 1000);
+  });
+
 });
 </script>

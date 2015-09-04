@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'home/index'
+  get 'home/index2'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -12,11 +13,14 @@ Rails.application.routes.draw do
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
   get 'accept_request/:id' => 'requests#accept_request', as: :accept_request
-  get 'message/:id' => 'messages#chatbox', as: :chatbox
+  get 'reject_request/:id' => 'requests#reject_request', as: :reject_request
+  get '/message/:id' => 'messages#chatbox', as: :chatbox
+  get '/message' => 'messages#chatbox'
   get 'dashboard' => 'home#dashboard', as: :dashboard
   get 'requests' => 'users#requests', as: :requests
   get 'coaches' => 'users#coaches', as: :coaches
   get 'messages' => 'users#messages', as: :messages
+  get 'get-messages' => 'messages#get_messages', as: :get_messages
 
   post '/new-message' => 'messages#new_message', as: :new_message
 

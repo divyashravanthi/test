@@ -1,8 +1,47 @@
+<br/>
+<h2>All coaches</h2>
+<br/>
 <% @coaches.each do |coach|%>
-<%= coach.name %><br/>
+<div class="col-md-4">
 	<%= form_for Request.new do |f| %>
 		<%= f.hidden_field :sender_id, :value => @user.id %>
 		<%= f.hidden_field :receiver_id, :value => coach.id %>
-		<%= f.submit "Send Request"%>
-	<% end %><br/>
+		<%#= f.submit "Send Request"%>
+    	 <div class="well profile">
+                    <h2><%= coach.name %></h2>
+                    <figcaption class="ratings">
+                            <p>Ratings
+                            <a href="#">
+                                <span class="fa fa-star"></span>
+                            </a>
+                            <a href="#">
+                                <span class="fa fa-star"></span>
+                            </a>
+                            <a href="#">
+                                <span class="fa fa-star"></span>
+                            </a>
+                            <a href="#">
+                                <span class="fa fa-star"></span>
+                            </a>
+                            <a href="#">
+                                 <span class="fa fa-star-o"></span>
+                            </a> 
+                            </p>
+                        </figcaption>
+                    <p><strong>Email: </strong> <%= coach.email %> </p>
+                    <p><strong>Tags: </strong>
+                        <span class="tags">tag1</span>  
+                        <span class="tags">tag2</span> 
+                        <span class="tags">tag3</span> 
+                        
+                    </p>
+                <div class="col-xs-12 col-sm-4 text-center">
+                </div>
+            <div class="col-xs-12 divider text-center">
+                    <p><small>Connection to be made</small></p>
+                    <%= f.submit "Send Request", :class => 'btn btn-info btn-block' %>
+            </div>
+    	 </div>                 
+		</div>
+<% end %>
 <% end%> 

@@ -21,6 +21,7 @@ class UsersController < ApplicationController
 		# Initialise temp session
 		session[:user_id] = @user.id
 		session[:user_role] = @user.role 
+		session[:not] = "Hello"
 		redirect_to home_index_path(:id=> @user.id)
 	end
 
@@ -34,7 +35,7 @@ class UsersController < ApplicationController
 	end
 
 	def requests
-		@requests = Request.where(:receiver_id => session[:user_id])
+		@requests = Request.where(:receiver_id => session[:user_id], :status => "Sent")
 	end
 
 	def coaches
@@ -44,9 +45,16 @@ class UsersController < ApplicationController
 
 	def messages
 		if session[:user_role] == "Client"
+			@client = true
 			@requests = User.find(session[:user_id]).requests.where(:status => "Accepted")
 		elsif session[:user_role] == "Coach"
+			@client = false
 			@requests = Request.where(:receiver_id => session[:user_id], :status => "Accepted")
+		end
+		if @requests.count > 0
+			redirect_to "/message/#{@requests.first.id}"
+		else
+			redirect_to "/message/0"
 		end
 	end
 end

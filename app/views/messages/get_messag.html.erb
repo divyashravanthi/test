@@ -1,0 +1,11 @@
+<% @messages.each do |m| %>
+	<% if m.sender_id == session[:user_id] %>
+		<div class="message bubble-right">
+	<% else %>
+		<div class="message bubble-left">
+	<% end %>
+	<label class="message-user"><%=User.find(m.sender_id).name%></label>
+	<label class="message-timestamp"><%=m.created_at%></label>
+	<p><%=m.raw_text%></p>
+	</div>
+<% end %>

@@ -9,7 +9,18 @@ class MessagesController < ApplicationController
 	end
 
 	def chatbox
-		@request = Request.find(params[:id])
+		if params[:id].to_i == 0
+			render :text => "No One to chat with"
+		else
+			@request = Request.find(params[:id])
+			if session[:user_role] == "Client"
+				@client = true
+				@requests = User.find(session[:user_id]).requests.where(:status => "Accepted")
+			elsif session[:user_role] == "Coach"
+				@client = false
+				@requests = Request.where(:receiver_id => session[:user_id], :status => "Accepted")
+			end
+		end
 	end
 
 	def new_message
@@ -19,12 +30,23 @@ class MessagesController < ApplicationController
 		else
 			@receiver_id = @req.user.id
 		end
-		# binding.pry
-		@msg = @req.messages.new(
+		@msg = @req.messages.create(
 			:sender_id => params[:sender_id],
 			:receiver_id => @receiver_id,
 			:raw_text => params[:msg])
-		@msg.save
-		render :text => "Message saved"
+		render :json => @msg.to_json
+	end
+
+	def get_messages
+		@messages = Request.find(params[:id]).messages
+		# @messages.each do |m|
+			# if m.receiver_id == session[:user_id]
+			# 	m.sender_name = Request.find(params[:id]).sender_id
+			# else
+			# 	m.sender_name = Request.find(params[:id]).receiver_id
+			# end
+		# end
+		# binding.pry
+		render :json => @messages.to_json(methods: :sender_name)
 	end
 end
