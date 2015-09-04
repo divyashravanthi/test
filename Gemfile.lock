@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/eventmachine/eventmachine.git
+  revision: a1fa52a7ca840b59bdf1d849ff47eb72cb7ca73c
+  specs:
+    eventmachine (1.0.8)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -64,7 +70,6 @@ GEM
     em-socksify (0.3.0)
       eventmachine (>= 1.0.0.beta.4)
     erubis (2.7.0)
-    eventmachine (1.0.3)
     execjs (2.5.2)
     faye (1.0.3)
       cookiejar (>= 0.3.0)
@@ -179,6 +184,7 @@ PLATFORMS
 DEPENDENCIES
   byebug
   coffee-rails (~> 4.1.0)
+  eventmachine!
   faye
   jbuilder (~> 2.0)
   jquery-rails
