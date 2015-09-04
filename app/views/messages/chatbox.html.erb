@@ -1,9 +1,5 @@
 <div class="chat_container">
-  
 </div>
-
-<br/>
-
 <div id="wrapper">
       <div class="message-container">
         <br/>
@@ -53,6 +49,8 @@
 <script type="text/javascript">
 $(document).ready(function(){
   var user_flag = 0;
+
+  //Subscribe to the channel
 	var public_subscription = client.subscribe("/messages/<%=@request.id%>", function(data) {
       if(data.signal == "typing" && user_flag == 0){
         console.log("here");
@@ -72,6 +70,8 @@ $(document).ready(function(){
         // $('<p></p>').html(data.sender + ": " + data.msg).appendTo('#chat_room');
       }
     });
+
+  //Sending a message and publishing it
 	$('#new_message_form').submit(function(){
       var request_id = $(this).data('request');
       console.log(request_id);
@@ -92,7 +92,6 @@ $(document).ready(function(){
           $('#message').val('');
         }
       });
- 
       // Don't actually submit the form, otherwise the page will refresh.
       return false;
     });

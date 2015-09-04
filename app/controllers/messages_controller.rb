@@ -10,7 +10,7 @@ class MessagesController < ApplicationController
 
 	def chatbox
 		if params[:id].to_i == 0
-			render :text => "No One to chat with"
+			render :text => "Inactive chat"
 		else
 			@request = Request.find(params[:id])
 			if session[:user_role] == "Client"
@@ -39,14 +39,6 @@ class MessagesController < ApplicationController
 
 	def get_messages
 		@messages = Request.find(params[:id]).messages
-		# @messages.each do |m|
-			# if m.receiver_id == session[:user_id]
-			# 	m.sender_name = Request.find(params[:id]).sender_id
-			# else
-			# 	m.sender_name = Request.find(params[:id]).receiver_id
-			# end
-		# end
-		# binding.pry
 		render :json => @messages.to_json(methods: :sender_name)
 	end
 end
