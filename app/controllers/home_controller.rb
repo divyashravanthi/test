@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   def index
-  	@user = User.find(session[:user_id])
+  	@user = current_user
   	if @user.role == "Client"
   		@coaches = User.where(:role=> "Coach")
   		# render 'client_view'

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Blint</title>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
+  <%= javascript_include_tag 'application' %>
+  <%= javascript_include_tag "http://localhost:9292/faye.js"%>
+  <!-- // <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
+  <script src="http://timeago.yarp.com/jquery.timeago.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Vendor CSS -->
+  <link href="/assets/animate.min.css" rel="stylesheet">
+  <link href="/assets/material-design-iconic-font.min.css" rel="stylesheet">
+      
+  <!-- CSS -->
+  <link href="/assets/app.min.1.css" rel="stylesheet">
+  <link href="/assets/app.min.2.css" rel="stylesheet">
+  <%= csrf_meta_tags %>
+  <script>
+    var client;
+    $(function() {
+      // Setting up a global Faye client
+      client = new Faye.Client("http://localhost:9292/faye");
+    })
+  </script>
+</head>
+<body class="login-content">
+
+<%= yield %>
+
+        
+  <%= javascript_include_tag 'application' %>
+        <script src="/assets/bootstrap.min.js"></script>
+        
+        <script src="/assets/waves.min.js"></script>
+        
+        <script src="/assets/functions.js"></script>
+        
+    </body>
+</html>

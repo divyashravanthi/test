@@ -25,6 +25,24 @@ class RequestsController < ApplicationController
 		redirect_to home_index_path
 	end
 
+	def closing
+		@req = Request.find(params[:id])
+		if current_user.role == "Client"
+			@req.status = "Close_pending"
+		else
+			@req.status = "Closed"
+		end
+		@req.save
+		render :text => "Success"
+	end
+
+	def publish
+		@req = Request.find(params[:id])
+		@req.published = true
+		@req.save
+		render :text => "Success"
+	end
+
 	def show
 	end
 

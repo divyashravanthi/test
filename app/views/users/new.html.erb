@@ -4,33 +4,33 @@
 		<title>Welcome to Blint</title>
 	</head>
 	<body class="nl-blurred">
-		<div class="container demo-1">
+		<!-- <div class="container demo-1"> -->
 			<!-- Top Navigation -->
-			<header>
+			<!-- <header>
 				<h1>Welcome to Blint! <span>Natural language form</span></h1>	
 			</header>
-			<div class="main clearfix">
-				<%= form_for @user, :html => {:class => "nl-form", :id => "nl-form"} do |f| %>
+			<div class="main clearfix"> -->
+				<%#= form_for @user, :html => {:class => "nl-form", :id => "nl-form"} do |f| %>
 				<!-- <form id="nl-form" class="nl-form"> -->
-					My name is 
-					<%= f.text_field :name, :id => "name" %>
+					<!-- My name is  -->
+					<%#= f.text_field :name, :id => "name" %>
 					<!-- <input type="text" value="" id="name" />  -->
-					with an email address
-					<%= f.email_field :email, :id => 'Email' %>
-					,and i would like to chat as a 
-					<%= f.select :role, options_for_select(["Role", "Client", "Coach"]), {}, :class => 'form-control' %>
+					<!-- with an email address -->
+					<%#= f.email_field :email, :id => 'Email' %>
+					<!-- ,and i would like to chat as a  -->
+					<%#= f.select :role, options_for_select(["Role", "Client", "Coach"]), {}, :class => 'form-control' %>
 					<!-- <select>
 						<option value="" selected>role</option>
 						<option value="Client">Client</option>
 						<option value="Coach">Coach</option>
 					</select> -->
-					<div class="nl-submit-wrap">
+					<!-- <div class="nl-submit-wrap">
 						<button class="nl-submit" type="submit">Dig in!</button>
 					</div>
-					<div class="nl-overlay"></div>
-				<%end%>
-			</div>
-		</div><!-- /container -->
+					<div class="nl-overlay"></div> -->
+				<%#end%>
+			<!-- </div> -->
+		<!-- </div>/container -->
 		<script src="/assets/nlform.js"></script>
 		<script>
 			var nlform = new NLForm( document.getElementById( 'nl-form' ) );

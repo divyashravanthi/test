@@ -1,0 +1,114 @@
+<!-- Login -->
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+
+  <div class="lc-block toggled" id="l-login">
+    <%= devise_error_messages! %>
+      <%- flash.each do |name, msg| -%>
+        <%= content_tag :div, msg, id: "flash_#{name}" %><br/>
+      <%- end -%>
+      <div class="input-group m-b-20">
+          <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+          <div class="fg-line">
+              <%= f.email_field :email, :placeholder => "Email Address", :class => "form-control" %>
+          </div>
+      </div>
+      
+      <div class="input-group m-b-20">
+          <span class="input-group-addon"><i class="zmdi zmdi-male"></i></span>
+          <div class="fg-line">
+            <%= f.password_field :password, autocomplete: "off", :placeholder => "Password", :class => "form-control" %>
+          </div>
+      </div>
+      
+      <div class="clearfix"></div>
+      
+      <div class="checkbox">
+          <label>
+              <%= f.check_box :remember_me %>
+              <i class="input-helper"></i>
+              Keep me signed in
+          </label>
+      </div>
+      
+      <button type="submit" class="btn btn-login btn-danger btn-float"><i class="zmdi zmdi-arrow-forward"></i></button>
+      
+      <ul class="login-navigation">
+          <li data-block="#l-register" class="bgm-red">Register</li>
+          <li data-block="#l-forget-password" class="bgm-orange">Forgot Password?</li>
+      </ul>
+  </div>
+<% end %>
+
+<!-- Register -->
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <div class="lc-block" id="l-register">
+    <%= devise_error_messages! %>
+      <%- flash.each do |name, msg| -%>
+        <%= content_tag :div, msg, id: "flash_#{name}" %><br/>
+      <%- end -%>
+      <div class="input-group m-b-20">
+          <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+          <div class="fg-line">
+              <%= f.text_field :name, autofocus: true, :placeholder => "Name", :class => "form-control" %>
+          </div>
+      </div>
+      
+      <div class="input-group m-b-20">
+          <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
+          <div class="fg-line">
+              <%= f.email_field :email, :placeholder => "Email Address", :class => "form-control" %>
+          </div>
+      </div>
+      
+      <div class="input-group m-b-20">
+          <span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
+          <div class="fg-line">
+              <%= f.text_field :role, :placeholder => "Role", :class => "form-control" %>
+          </div>
+      </div>
+
+      <div class="input-group m-b-20">
+          <span class="input-group-addon"><i class="zmdi zmdi-male"></i></span>
+          <div class="fg-line">
+            <%= f.password_field :password, autocomplete: "off", :placeholder => "Password", :class => "form-control" %>
+          </div>
+      </div>
+
+      <div class="input-group m-b-20">
+          <span class="input-group-addon"><i class="zmdi zmdi-male"></i></span>
+          <div class="fg-line">
+          <%= f.password_field :password_confirmation, autocomplete: "off", :placeholder => "Confirm Password", :class => "form-control" %>
+          </div>
+      </div>
+      
+      <div class="clearfix"></div>
+      
+      <button type="submit" class="btn btn-login btn-danger btn-float"><i class="zmdi zmdi-arrow-forward"></i></button>
+      
+      <ul class="login-navigation">
+          <li data-block="#l-login" class="bgm-green">Login</li>
+          <li data-block="#l-forget-password" class="bgm-orange">Forgot Password?</li>
+      </ul>
+  </div>
+<% end %>
+
+<!-- Forgot Password -->
+<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+  <div class="lc-block" id="l-forget-password">
+      <p class="text-left">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu risus. Curabitur commodo lorem fringilla enim feugiat commodo sed ac lacus.</p>
+      
+      <div class="input-group m-b-20">
+          <span class="input-group-addon"><i class="zmdi zmdi-email"></i></span>
+          <div class="fg-line">
+              <%= f.email_field :email, :class => "form-control", :placeholder => "Email Address" %>
+          </div>
+      </div>
+      
+      <button type="submit" class="btn btn-login btn-danger btn-float"><i class="zmdi zmdi-arrow-forward"></i></button>
+      
+      <ul class="login-navigation">
+          <li data-block="#l-login" class="bgm-green">Login</li>
+          <li data-block="#l-register" class="bgm-red">Register</li>
+      </ul>
+  </div>
+<% end %>

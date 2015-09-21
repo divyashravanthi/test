@@ -1,47 +1,141 @@
-<br/>
-<h2>All coaches</h2>
-<br/>
-<% @coaches.each do |coach|%>
-<div class="col-md-4">
-	<%= form_for Request.new do |f| %>
-		<%= f.hidden_field :sender_id, :value => @user.id %>
-		<%= f.hidden_field :receiver_id, :value => coach.id %>
-		<%#= f.submit "Send Request"%>
-    	 <div class="well profile">
-                    <h2><%= coach.name %></h2>
-                    <figcaption class="ratings">
-                            <p>Ratings
-                            <a href="#">
-                                <span class="fa fa-star"></span>
-                            </a>
-                            <a href="#">
-                                <span class="fa fa-star"></span>
-                            </a>
-                            <a href="#">
-                                <span class="fa fa-star"></span>
-                            </a>
-                            <a href="#">
-                                <span class="fa fa-star"></span>
-                            </a>
-                            <a href="#">
-                                 <span class="fa fa-star-o"></span>
-                            </a> 
-                            </p>
-                        </figcaption>
-                    <p><strong>Email: </strong> <%= coach.email %> </p>
-                    <p><strong>Tags: </strong>
-                        <span class="tags">tag1</span>  
-                        <span class="tags">tag2</span> 
-                        <span class="tags">tag3</span> 
+<section id="content">
+
+                <div class="container">
+
+                    <div class="block-header">
+                        <h2>Coaches<small>Send a request to initiate a chat session.</small></h2>
+                
+                        <!-- <ul class="actions m-t-20 hidden-xs">
+                            <li class="dropdown">
+                                <a href="" data-toggle="dropdown">
+                                    <i class="zmdi zmdi-more-vert"></i>
+                                </a>
+                
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li>
+                                        <a href="">Privacy Settings</a>
+                                    </li>
+                                    <li>
+                                        <a href="">Account Settings</a>
+                                    </li>
+                                    <li>
+                                        <a href="">Other Settings</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul> -->
+                    </div>
+                    
+                    <button class="btn btn-float btn-danger m-btn"><i class="zmdi zmdi-plus"></i></button>
+                
+                    
+                    <div class="card">
+                        <div class="lv-header-alt clearfix m-b-5">
+                            <h2 class="lvh-label hidden-xs"><%=User.where(:role => "Coach").all.count%> Coaches.</h2>
+                            
+                            <div class="lvh-search">
+                                <input type="text" placeholder="Start typing..." class="lvhs-input">
+                                
+                                <i class="lvh-search-close">&times;</i>
+                            </div>
+                            
+                            <!-- <ul class="lv-actions actions">
+                                <li>
+                                    <a href="" class="lvh-search-trigger">
+                                        <i class="zmdi zmdi-search"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <i class="zmdi zmdi-time"></i>
+                                    </a>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="" data-toggle="dropdown"="" aria-expanded="false" aria-haspopup="true">
+                                        <i class="zmdi zmdi-sort"></i>
+                                    </a>
+                
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li>
+                                            <a href="">Last Modified</a>
+                                        </li>
+                                        <li>
+                                            <a href="">Last Edited</a>
+                                        </li>
+                                        <li>
+                                            <a href="">Name</a>
+                                        </li>
+                                        <li>
+                                            <a href="">Date</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <i class="zmdi zmdi-info"></i>
+                                    </a>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="" data-toggle="dropdown"="" aria-expanded="false" aria-haspopup="true">
+                                        <i class="zmdi zmdi-more-vert"></i>
+                                    </a>
+                
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li>
+                                            <a href="">Refresh</a>
+                                        </li>
+                                        <li>
+                                            <a href="">Settings</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul> -->
+                        </div>
                         
-                    </p>
-                <div class="col-xs-12 col-sm-4 text-center">
-                </div>
-            <div class="col-xs-12 divider text-center">
-                    <p><small>Connection to be made</small></p>
-                    <%= f.submit "Send Request", :class => 'btn btn-info btn-block' %>
-            </div>
-    	 </div>                 
-		</div>
-<% end %>
-<% end%> 
+                        
+                        <div class="card-body card-padding">
+                            <div class="contacts clearfix row">
+                                <% @coaches.each do |coach| %>
+                                <%= form_for Request.new do |f| %>
+                                <%= f.hidden_field :sender_id, :value => current_user.id %>
+                                <%= f.hidden_field :receiver_id, :value => coach.id %>
+                                <div class="col-md-2 col-sm-4 col-xs-6">
+                                    <div class="c-item">
+                                        <a href="/profile/<%=coach.id%>" class="ci-avatar">
+                                            <img 
+                                            <% if coach.avatar.present? %>
+                                            src= "<%=coach.avatar.url%>"
+                                            <% else %>
+                                            src = "http://cdn3.rd.io/user/no-user-image-square.jpg"
+                                            <% end %>
+                                            />
+                                        </a>
+                
+                                        <div class="c-info">
+                                            <strong><%=coach.name%> 
+                                            <% if coach.online %>
+                                             <i class="fa fa-circle"></i>
+                                             <% end %>
+                                             </strong>
+                                            <small><%=coach.email%></small>
+                                        </div>
+                                            
+                                        <div class="c-footer">
+
+                                            <button type="submit" class="waves-effect"><i class="zmdi zmdi-person-add"></i> Request</button>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <% end %>
+                                <% end %>
+                            </div>
+                
+                            <!-- <div class="load-more">
+                                <a href=""><i class="zmdi zmdi-refresh-alt"></i> Load More...</a>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>  
+
+            </section>

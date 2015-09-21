@@ -1,50 +1,207 @@
+<section id="content">
+                <div class="container">
+                    <div class="block-header">
+                        <h2>Active Chat Sessions</h2>
+                    </div>
+                
+                    <div class="card m-b-0" id="messages-main">
+                        
+                        <a href="" class="btn bgm-red btn-float m-btn" id="ms-compose">
+                            <i class="zmdi zmdi-plus"></i>
+                        </a>
+                        
+                        <div class="ms-menu">
+                            <div class="ms-block">
+                                <div class="ms-user">
+                                    <img src="<%=current_user.avatar.url%>" alt="">
+                                    <div>Signed in as <br/> <%=current_user.email%></div>
+                                </div>
+                            </div>
+                            
+                            <div class="listview lv-user m-t-20">
+                               <% @requests.each do |request| %>
+                               <% if @request.id == request.id %>
+                                <div class="lv-item media active">
+                               <% else %>
+                                <div class="lv-item media">
+                               <% end %>
+                               <a href = "/message/<%=request.id%>">
+                                  <% if @client %>
+                                    <% if User.find(request.receiver_id).avatar.url.present? %>
+                                      <div class="lv-avatar pull-left">
+                                        <img src="<%=User.find(request.receiver_id).avatar.url%>" alt="">
+                                      </div>
+                                    <%else %>
+                                      <div class="lv-avatar bgm-red pull-left"><%=User.find(request.receiver_id).name.first%></div>
+                                    <% end %>
+                                    <div class="media-body">
+                                        <div class="lv-title"><%=User.find(request.receiver_id).name%></div>
+                                        <div class="lv-small"><%=User.find(request.receiver_id).email%></div>
+                                    </div>
+                                  <% else %>
+                                    <% if request.user.avatar.url.present? %>
+                                      <div class="lv-avatar pull-left">
+                                        <img src="<%=request.user.avatar.url%>" alt="">
+                                      </div>
+                                    <%else %>
+                                      <div class="lv-avatar bgm-red pull-left"><%=User.find(request.receiver_id).name.first%></div>
+                                    <% end %>
+                                    <div class="media-body">
+                                        <div class="lv-title"><%=request.user.name%></div>
+                                        <div class="lv-small"><%=request.user.email%></div>
+                                    </div>
+                                  <% end %>
+                                </a>
+                                </div>
+                                <% end %>
+                            </div>
+                        </div>
+                        
+                        <div class="ms-body">
+                            <div class="listview lv-message">
+                                <div class="lv-header-alt clearfix">
+                                    <div id="ms-menu-trigger">
+                                        <div class="line-wrap">
+                                            <div class="line top"></div>
+                                            <div class="line center"></div>
+                                            <div class="line bottom"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="lvh-label hidden-xs">
+                                        <div class="lv-avatar pull-left">
+                                            <img alt="" src=
+                                            <% if @request.user_id == current_user.id %>
+                                              "<%= User.find(@request.receiver_id).avatar.url %>"
+                                            <% else %>
+                                              "<%= User.find(@request.user_id).avatar.url %>"
+                                            <% end %>
+                                            >
+                                        </div>
+                                        
+                                        <span class="c-black">
+                                          <% if @request.user_id == current_user.id %>
+                                            <%= User.find(@request.receiver_id).name %>
+                                          <% else %>
+                                            <%= User.find(@request.user_id).name %>
+                                          <% end %>
+                                        </span>
+                                        <span class="typing-sign"><i>Typing...</i></span>
+                                    </div>
+                                    
+                                    <!-- <ul class="lv-actions actions">
+                                        <li>
+                                            <a href="">
+                                                <i class="zmdi zmdi-delete"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="">
+                                                <i class="zmdi zmdi-check"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="">
+                                                <i class="zmdi zmdi-time"></i>
+                                            </a>
+                                        </li>
+                                        <li class="dropdown">
+                                            <a href="" data-toggle="dropdown" aria-expanded="true">
+                                                <i class="zmdi zmdi-sort"></i>
+                                            </a>
+                                
+                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                <li>
+                                                    <a href="">Latest</a>
+                                                </li>
+                                                <li>
+                                                    <a href="">Oldest</a>
+                                                </li>
+                                            </ul>
+                                        </li>                             
+                                        <li class="dropdown">
+                                            <a href="" data-toggle="dropdown" aria-expanded="true">
+                                                <i class="zmdi zmdi-more-vert"></i>
+                                            </a>
+                                
+                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                <li>
+                                                    <a href="">Refresh</a>
+                                                </li>
+                                                <li>
+                                                    <a href="">Message Settings</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul> -->
+                                </div>
+                                
+                                <div class="lv-body">   
+                                <% @request.messages.each do |m| %>
+                                  <% if current_user.name == m.sender_name %>
+                                    <div class="lv-item media right">
+                                        <div class="lv-avatar pull-right">
+                                            <img src="<%=User.find(m.sender_id).avatar.url%>" alt="">
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="ms-item">
+                                                <%=m.raw_text %>
+                                            </div>
+                                            <small class="ms-date"><i class="zmdi zmdi-access-time"></i> <%=time_ago_in_words(m.created_at)%> ago</small>
+                                        </div>
+                                    </div>
+                                  <% else %>
+                                    <div class="lv-item media">
+                                        <div class="lv-avatar pull-left">
+                                            <img src="<%=User.find(m.sender_id).avatar.url%>" alt="">
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="ms-item">
+                                                <%=m.raw_text %>
+                                            </div>
+                                            <small class="ms-date"><i class="zmdi zmdi-access-time"></i> <%=time_ago_in_words(m.created_at)%> ago</small>
+                                        </div>
+                                    </div>
+
+                                  <% end %>
+                                <% end %>  
+                                </div>                               
+                                <div class="lv-footer ms-reply">
+                                    <textarea placeholder="What's on your mind..." id="message"></textarea>
+                                    
+                                    <button class="send-btn" data-request="<%=@request.id%>"><i class="zmdi zmdi-mail-send"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+
+
 <div class="chat_container">
 </div>
 <div id="wrapper">
-      <div class="message-container">
-        <br/>
-        <div class="message-north">
-          <ul class="message-user-list">
-            <% @requests.each do |request| %>
-            <li class="row">
-              <a href="/message/<%=request.id%>" class="requests" data-id="<%=request.id%>">
-                <span class="user-img"></span>
-                <% if @client %>
-                  <span class="user-title"><%=User.find(request.receiver_id).name%></span>
-                  <p class="user-desc"><%=User.find(request.receiver_id).email%></p>
-                <% else %>
-                  <span class="user-title"><%=request.user.name%></span>
-                  <p class="user-desc"><%=request.user.email%></p>
-                <% end %>
-              </a>
-            </li><br/>
-            <% end %>
-          </ul>
-          <div class="message-thread">
-            <% @request.messages.each do |m| %>
-            <% if User.find(session[:user_id]).name == m.sender_name %>
-              <div class="message bubble-right">
-            <% else %>
-              <div class="message bubble-left">
-            <% end %>
-                <label class="message-user"><%=m.sender_name%></label>
-                <label class="message-timestamp"><%=time_ago_in_words(m.created_at)%> ago</label>
-                <p><%=m.raw_text%></p>
-              </div>
-            <% end %>
-          </div>
-          
-        </div>
-        <div class="message-south">
-          <div class="typing-container"><div class="typing-sign">Now typing....</div></div>
-          <form id="new_message_form" data-request="<%=@request.id%>">
-          <textarea cols="20" rows="3" id="message" name="message"></textarea>
-          <input type="submit" value="Send" class="btn btn-primary pull-right" style="
-          height: 85px;">
-          </form>
-        </div>
-      </div>
-    </div>
+  <div class="session-status-container">
+    <% if @request.status == "Close_pending"%>
+      <% if current_user.role == "Coach" %>
+        The client has request for the session to be terminated. 
+        <button class="terminate-button btn btn-default">Click here</button>
+        <%#= link_to "Click here", closing_request_path(:id => @request.id) %>
+        Click here to terminate now!
+      <% elsif current_user.role == "Client" %>
+        Awaiting termination from the coach. 
+      <% end %>
+    <% elsif @request.status == "Closed" %>
+      This session has been archived, contact administrator if you'd like to restore! 
+    <% elsif @request.status != "Closed" && @request.status != "Close_pending" %>
+      Would you like to terminate the session? 
+      <button class="terminate-button btn btn-default">Yes</button>
+    <% end %>
+  </div>
+  
+      
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -53,40 +210,46 @@ $(document).ready(function(){
   //Subscribe to the channel
 	var public_subscription = client.subscribe("/messages/<%=@request.id%>", function(data) {
       if(data.signal == "typing" && user_flag == 0){
-        console.log("here");
+        console.log("here 1");
         $(".typing-sign").show();
         setTimeout(function(){ $(".typing-sign").hide() }, 2000);
       }
       else if(data.msg){
+        console.log(data);
         var new_msg = "";
-        if(data.sender == "<%= User.find(session[:user_id]).name%>"){
-          new_msg+= '<div class="message bubble-right">';
+        if(data.sender == "<%= current_user.name%>"){
+          new_msg+= '<div class="lv-item media right"><div class="lv-avatar pull-right"><img src="'+
+          data.msg.avatar_url+'" alt=""></div><div class="media-body"><div class="ms-item">'+
+          data.msg.raw_text+'</div><small class="ms-date"><i class="zmdi zmdi-access-time"></i>'+ 
+          data.msg.created_at+' ago</small></div></div>';
         }
         else{
-          new_msg+= '<div class="message bubble-left">';
+          new_msg+= new_msg+= '<div class="lv-item media"><div class="lv-avatar pull-left"><img src="'+
+          data.msg.avatar_url+'" alt=""></div><div class="media-body"><div class="ms-item">'+
+          data.msg.raw_text+'</div><small class="ms-date"><i class="zmdi zmdi-access-time"></i>'+ 
+          data.msg.created_at+' ago</small></div></div>';
         }
-        new_msg += '<label class="message-user">'+data.sender+'</label><label class="message-timestamp">'+$.timeago(data.msg.created_at)+'</label><p>'+data.msg.raw_text+'</p></div>'
-        $(".message-thread").append(new_msg);
+        
+        $(".lv-body").append(new_msg);
         // $('<p></p>').html(data.sender + ": " + data.msg).appendTo('#chat_room');
       }
     });
 
   //Sending a message and publishing it
-	$('#new_message_form').submit(function(){
+	$('.send-btn').click(function(){
       var request_id = $(this).data('request');
-      console.log(request_id);
       $.ajax({
         url: "/new-message",
         type: "POST",
         data: {
           msg: $('#message').val(), 
           request_id: request_id, 
-          sender_id: "<%=session[:user_id]%>"},
+          sender_id: "<%=current_user.id%>"},
         success: function(data){
           // Publish the message to the public channel after a successful entry to the database
           client.publish("/messages/"+request_id, {
             msg: data,
-            sender: "<%=User.find(session[:user_id]).name%>"
+            sender: "<%=current_user.name%>"
           });
           // Clear the message box
           $('#message').val('');
@@ -98,7 +261,7 @@ $(document).ready(function(){
 
   //Typing event
   $("#message").keyup(function(){
-    console.log("here");
+    console.log("keuup yes");
       if($(".typing-sign").css('display') == "none"){
         client.publish("/messages/<%=@request.id%>", {
                 signal: "typing"
@@ -106,6 +269,34 @@ $(document).ready(function(){
         user_flag = 1;
       }
       setTimeout(function(){ user_flag = 0; }, 1000);
+  });
+
+
+  //Terminate sessions via Ajax
+  $(".terminate-button").click(function(){
+    $.ajax({
+      url: "/close_session/<%=@request.id%>",
+      method: "GET",
+      success: function(data){
+        <% if current_user.role == "Client" %>
+        $(".session-status-container").html("Request to terminate this session has been registered");
+        <% else %>
+        $(".session-status-container").html("Session Terminated successfully!");
+        <% end %>
+      }
+    })
+  });
+
+  //Publishing sessions
+  $(".publish-btn").click(function(){
+    $.ajax({
+      url: "/publish_session/<%=@request.id%>",
+      method: "GET",
+      success: function(){
+        location.href = "/published_message/<%=@request.id%>";
+        // window.location("/published_message/<%=@request.id%>");
+      }
+    })
   });
 
 });

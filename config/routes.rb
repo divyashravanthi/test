@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   get 'home/index'
   get 'home/index2'
 
@@ -21,11 +22,21 @@ Rails.application.routes.draw do
   get 'coaches' => 'users#coaches', as: :coaches
   get 'messages' => 'users#messages', as: :messages
   get 'get-messages' => 'messages#get_messages', as: :get_messages
+  get 'close_session/:id' => 'requests#closing', as: :closing_request
+  get 'publish_session/:id' => 'requests#publish', as: :publish_request
+  get 'archived_sessions' => "users#archived_messages"
+  get 'archived_message/:id' => "messages#archived_chatbox", as: :archived_chatbox
+  get 'published_sessions' => 'users#published_messages', as: :published
+  get 'published_message/:id' => 'messages#published_chatbox', as: :published_chatbox
+  get 'profile/:id' => 'users#profile', as: :profile_path
+  get 'search_coaches/:type/:term' => 'users#coach_search', as: :coach_search
 
   post '/new-message' => 'messages#new_message', as: :new_message
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
-  resources :users
+  resources :users do
+    post :keep_online
+  end
   resources :messages
   resources :requests
 

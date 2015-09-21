@@ -8,19 +8,51 @@ class MessagesController < ApplicationController
 	def delete
 	end
 
+	def published_chatbox
+		if params[:id].to_i == 0
+			render :text => "Inactive chat"
+		else
+			@request = Request.find(params[:id])
+			if current_user.role == "Client"
+				@client = true
+				@requests = current_user.requests.where(:published => true, :status => "Closed")
+			elsif current_user.role == "Coach"
+				@client = false
+				@requests = Request.where(:receiver_id => current_user.id, :published => true, :status => "Closed")
+			end
+		end
+	end
+
+
+	def archived_chatbox
+		if params[:id].to_i == 0
+			render :text => "Inactive chat"
+		else
+			@request = Request.find(params[:id])
+			if current_user.role == "Client"
+				@client = true
+				@requests = current_user.requests.where(:status => "Closed")
+			elsif current_user.role == "Coach"
+				@client = false
+				@requests = Request.where(:receiver_id => current_user.id, :status => "Closed")
+			end
+		end
+	end
+
 	def chatbox
 		if params[:id].to_i == 0
 			render :text => "Inactive chat"
 		else
 			@request = Request.find(params[:id])
-			if session[:user_role] == "Client"
+			if current_user.role == "Client"
 				@client = true
-				@requests = User.find(session[:user_id]).requests.where(:status => "Accepted")
-			elsif session[:user_role] == "Coach"
+				@requests = current_user.requests.where(:status => ["Accepted", "Close_pending"])
+			elsif current_user.role == "Coach"
 				@client = false
-				@requests = Request.where(:receiver_id => session[:user_id], :status => "Accepted")
+				@requests = Request.where(:receiver_id => current_user.id, :status => ["Accepted", "Close_pending"])
 			end
 		end
+		# binding.pry
 	end
 
 	def new_message

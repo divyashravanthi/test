@@ -3,10 +3,10 @@
 <head>
   <title>Blint</title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
   <%= javascript_include_tag 'application' %>
   <%= javascript_include_tag "http://localhost:9292/faye.js"%>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <!-- // <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
   <script src="http://timeago.yarp.com/jquery.timeago.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   <%= csrf_meta_tags %>
@@ -15,11 +15,31 @@
     $(function() {
       // Setting up a global Faye client
       client = new Faye.Client("http://localhost:9292/faye");
-    })
+    });
+    $(document).ready(function(){
+      <% if current_user.present? %>
+      function keep_online(){
+        $.ajax({
+            url:"/users/<%=current_user.id%>/keep_online",
+            type: 'POST',
+            success: function(data){
+                $.each(data, function(k,v){
+                    if(v.online){
+                        $("#indicator_"+v.id).html('online');
+                    }else{
+                        $("#indicator_"+v.id).html('offline');
+                    }
+                });
+                setTimeout(keep_online, 5000);
+            }
+        });
+      }
+      setTimeout(keep_online, 5000);
+      <% end %>
+    });
   </script>
 </head>
 <body>
-  <div class="container">
 	<nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -31,21 +51,52 @@
       </button>
       <a class="navbar-brand" href="#"></a>
     </div>
-    <% if session[:user_id] %>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
+        <% if !user_signed_in? %>
+        <li><a href="/users/sign_up">Register</a></li>
+        <li><a href="/users/sign_in">Login</a></li>
+        <li><a href="/sessions"></a></li>
+        <% else %>
+        <li><%#= link_to('Logout', destroy_user_session_path, :method => :delete) %></li>
+        <li class="dropdown pull-right">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <% if current_user.avatar.url %>
+            <img src="<%=current_user.avatar.url%>" class="img-header">
+            <% else %>
+            <img src="http://www.fitandboxe.it/wp-content/uploads/2014/09/genericUserImg.png" class="img-header">
+            <% end %>
+             <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/profile/<%=current_user.id%>">My Profile</a></li>
+            <li role="separator" class="divider"></li>
+            <li><%= link_to('Logout', destroy_user_session_path, :method => :delete) %></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sessions <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/archived_sessions">Archived</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="/published_sessions">Published</a></li>
+          </ul>
+        </li>
+        <% end %>
         <!-- <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li> -->
+        <% if session[:user_id] or user_signed_in?%>
         <li><a href="/messages">Messages</a></li>
-        <% if session[:user_role] == 'Coach'%>
+        <% if current_user.role == 'Coach'%>
         <li><a href="/requests">Requests</a></li>
-        <% elsif session[:user_role] == 'Client'%>
+        <% elsif current_user.role == 'Client'%>
         <li><a href="/coaches">Coaches</a></li>
         <% end %>
+
       </ul>
     </div><!-- /.navbar-collapse -->
     <% end %>
   </div><!-- /.container-fluid -->
 </nav>
+<div class="container">
 <%= yield %>
 </div>
 </body>
