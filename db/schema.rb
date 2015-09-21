@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150921124306) do
+ActiveRecord::Schema.define(version: 20150921134656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,11 +30,12 @@ ActiveRecord::Schema.define(version: 20150921124306) do
   create_table "requests", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "receiver_id"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-    t.string   "status",      default: "Sent"
-    t.boolean  "published",   default: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.string   "status",            default: "Sent"
+    t.boolean  "published",         default: false
     t.text     "title"
+    t.boolean  "client_visibility"
   end
 
   add_index "requests", ["user_id"], name: "index_requests_on_user_id", using: :btree

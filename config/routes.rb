@@ -30,6 +30,8 @@ Rails.application.routes.draw do
   get 'published_message/:id' => 'messages#published_chatbox', as: :published_chatbox
   get 'profile/:id' => 'users#profile', as: :profile_path
   get 'search_coaches/:type/:term' => 'users#coach_search', as: :coach_search
+  get 'published_messages' => 'requests#published_messages'
+  get 'archived_messages' => 'requests#archived_messages'
 
   post '/new-message' => 'messages#new_message', as: :new_message
 

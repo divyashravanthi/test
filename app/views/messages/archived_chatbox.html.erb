@@ -1,33 +1,16 @@
 <div class="chat_container">
 </div>
 <div id="wrapper">
-  <div class="session-status-container">
-    Archived Messages.
+  <div class="session-status-container text-center">
+    <h3><%= @request.title %></h3>
+    Session owner: <%= @request.user.name %><br/>
+    Coach: <%= User.find(@request.receiver_id).name %><br/>
   </div>
   
       <div class="message-container">
         <br/>
-        <div class="message-north" style="height:92%;">
-          <ul class="message-user-list">
-            <% @requests.each do |request| %>
-            <li class="row">
-              <a href="/archived_message/<%=request.id%>" class="requests" data-id="<%=request.id%>">
-                <span class="user-img"></span>
-                <% if @client %>
-                  <span class="user-title"
-                  <% if @request.status == "Closed" %>
-                  style="color:gray;"
-                  <% end %>
-                  ><%=User.find(request.receiver_id).name%></span>
-                  <p class="user-desc"><%=User.find(request.receiver_id).email%></p>
-                <% else %>
-                  <span class="user-title"><%=request.user.name%></span>
-                  <p class="user-desc"><%=request.user.email%></p>
-                <% end %>
-              </a>
-            </li><br/>
-            <% end %>
-          </ul>
+        <div class="message-north closed-thread">
+          
           <div class="message-thread">
             <% @request.messages.each do |m| %>
             <% if current_user.name == m.sender_name %>
@@ -43,10 +26,6 @@
           </div>
           
         </div>
-        
       </div>
     </div>
 
-<script type="text/javascript">
-
-</script>

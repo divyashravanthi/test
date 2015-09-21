@@ -1,3 +1,25 @@
+<!-- Modal -->
+<div id="titlemodal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Please give a title for the session</h4>
+      </div>
+      <div class="modal-body">
+        
+        <input type="text" class="title-input form-control"/>
+      </div>
+      <div class="modal-footer text-center">
+        <button type="button" class="btn btn-info pull-left btn-title-save" data-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button><br/>
+      </div>
+    </div>
+
+  </div>
+</div>
 <section id="content">
                 <div class="container">
                     <div class="block-header">
@@ -67,6 +89,25 @@
                                             <div class="line bottom"></div>
                                         </div>
                                     </div>
+                                    <% if current_user.role == "Coach" %>
+                                    <ul class="lv-actions actions">
+                                        Publish
+                                        <li class="dropdown">
+                                            <a href="" data-toggle="dropdown" aria-expanded="true">
+                                                <i class="zmdi zmdi-more-vert"></i>
+                                            </a>
+                                
+                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                <li>
+                                                    <a href="#" class="option-btns" data-value="terminate">Private</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="option-btns" data-value="publish">Public</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <% end %>
 
                                     <div class="lvh-label hidden-xs">
                                         <div class="lv-avatar pull-left">
@@ -204,9 +245,40 @@
       
 
 <script type="text/javascript">
-$(document).ready(function(){
-  var user_flag = 0;
+function terminate_session(){
+    $.ajax({
+      url: "/close_session/<%=@request.id%>",
+      data: {title: $(".title-input").val()},
+      method: "GET",
+      success: function(data){
+        location.href = "/archived_message/<%=@request.id%>"
+      }
+    });
+  }
 
+  //Publishing sessions
+  function publish_session(){
+    $.ajax({
+      url: "/publish_session/<%=@request.id%>",
+      data: {title: $(".title-input").val()},
+      method: "GET",
+      success: function(){
+        location.href = "/published_message/<%=@request.id%>";
+        // window.location("/published_message/<%=@request.id%>");
+      }
+    });
+  }
+$(document).ready(function(){
+  $(".option-btns").click(function(e){
+  e.preventDefault();
+  console.log("dsdd");
+  console.log($("#titleModal"));
+  jQuery("#titlemodal").modal("show");
+  option_id = $(this).data('value');
+});
+
+  var user_flag = 0;
+  $('.lv-body').scrollTop($('.lv-body')[0].scrollHeight);
   //Subscribe to the channel
 	var public_subscription = client.subscribe("/messages/<%=@request.id%>", function(data) {
       if(data.signal == "typing" && user_flag == 0){
@@ -231,6 +303,7 @@ $(document).ready(function(){
         }
         
         $(".lv-body").append(new_msg);
+        $('.lv-body').scrollTop($('.lv-body')[0].scrollHeight);
         // $('<p></p>').html(data.sender + ": " + data.msg).appendTo('#chat_room');
       }
     });
@@ -272,32 +345,25 @@ $(document).ready(function(){
   });
 
 
-  //Terminate sessions via Ajax
-  $(".terminate-button").click(function(){
-    $.ajax({
-      url: "/close_session/<%=@request.id%>",
-      method: "GET",
-      success: function(data){
-        <% if current_user.role == "Client" %>
-        $(".session-status-container").html("Request to terminate this session has been registered");
-        <% else %>
-        $(".session-status-container").html("Session Terminated successfully!");
-        <% end %>
-      }
-    })
-  });
+  var option_id;
+$(".option-btns").click(function(e){
+  // e.preventDefault();
+  console.log($("#titlemodal"));
+  $("#titlemodal").modal('show');
+  option_id = $(this).data('value');
+});
 
-  //Publishing sessions
-  $(".publish-btn").click(function(){
-    $.ajax({
-      url: "/publish_session/<%=@request.id%>",
-      method: "GET",
-      success: function(){
-        location.href = "/published_message/<%=@request.id%>";
-        // window.location("/published_message/<%=@request.id%>");
-      }
-    })
-  });
+$(".btn-title-save").click(function(){
+  if(option_id == "terminate"){
+    terminate_session();
+  }
+  else if(option_id == "publish"){
+    publish_session();
+  }
+  else{
+    alert("Invalid operation");
+  }
+});
 
 });
 </script>

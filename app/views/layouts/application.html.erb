@@ -3,12 +3,15 @@
 <head>
   <title>Blint</title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
-  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
   <%= javascript_include_tag 'application' %>
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
   <%= javascript_include_tag "http://localhost:9292/faye.js"%>
   <!-- // <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
   <script src="http://timeago.yarp.com/jquery.timeago.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/jq-2.1.4,dt-1.10.9/datatables.min.css"/>
+ 
+<script type="text/javascript" src="https://cdn.datatables.net/r/dt/jq-2.1.4,dt-1.10.9/datatables.min.js"></script>
   <%= csrf_meta_tags %>
   <script>
     var client;
@@ -76,9 +79,9 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sessions <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="/archived_sessions">Archived</a></li>
+             <li><a href="/archived_messages">Archived</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="/published_sessions">Published</a></li>
+            <li><a href="/published_messages">Published</a></li>
           </ul>
         </li>
         <% end %>

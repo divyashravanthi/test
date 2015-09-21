@@ -43,6 +43,18 @@ class RequestsController < ApplicationController
 		render :text => "Success"
 	end
 
+	def published_messages
+		@sessions = Request.where(:published => true, :status => "Closed")
+	end
+
+	def archived_messages
+		if current_user.role == "Client"
+			@sessions = current_user.requests.where(:published => false, :status => "Closed")
+		elsif current_user.role == "Coach"
+			@sessions = Request.where(:receiver_id => current_user.id, :published => false, :status => "Closed")
+		end
+	end
+
 	def show
 	end
 

@@ -1,0 +1,32 @@
+<!-- <div class="container"> -->
+<br/>
+<br/>
+	<div class="row col-md-10 col-md-offset-1">
+	<table class="table table-striped" id="closed-threads">
+		<thead>
+			<th>Coach</th>
+			<th>Title</th>
+			<th>Created at</th>
+		</thead>
+		<tbody>
+			<% @sessions.each do |s| %>
+				<tr>
+					<td>
+						<a href="/profile/<%=s.receiver_id%>"><img src="<%=User.find(s.receiver_id).avatar.url%>" class="img-header"></a><br/>
+						<%=User.find(s.receiver_id).name%>
+					</td>
+					<td><br/><a href="/archived_message/<%=s.id%>"><%=s.title%></a></td>
+					<td><br/><%=s.created_at%></td>
+					
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>
+	
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#closed-threads").dataTable();
+});
+</script>
+<!-- </div> -->
