@@ -4,7 +4,8 @@ class RequestsController < ApplicationController
 	end
 
 	def create
-		User.find(params[:request][:sender_id]).requests.create(:receiver_id => params[:request][:receiver_id])
+		@request = User.find(params[:request][:sender_id]).requests.create(:receiver_id => params[:request][:receiver_id])
+		@request.delay(run_at: 10.minutes.from_now).mark_expired
 		session[:not] = "Request sent!"
 		redirect_to home_index_path
 	end
