@@ -62,7 +62,7 @@
                                           <% if request.is_expired %>
                                             <div class="lv-small">Expired</div>
                                           <% else %>
-                                            <div class="lv-small"><span data-countdown="<%=Time.zone.parse((request.created_at + 10.minutes).to_s).strftime('%Y/%m/%d %H:%M:%S')%>"></span></div>
+                                            <div class="lv-small"><span data-countdown="<%=Time.zone.parse((request.created_at + 10.minutes).to_s).localtime.strftime('%Y/%m/%d %H:%M:%S')%>"></span></div>
                                           <% end %>
                                           <span class="message-count<%=request.id%> message-count">
                                             <% if request.user_id == current_user.id %>
@@ -90,7 +90,7 @@
                                           <% if request.is_expired %>
                                             <div class="lv-small">Expired</div>
                                           <% else %>
-                                            <div class="lv-small"><span data-countdown="<%=Time.zone.parse((request.created_at + 10.minutes).to_s).strftime('%Y/%m/%d %H:%M:%S')%>"></span></div>
+                                            <div class="lv-small"><span data-countdown="<%=Time.zone.parse((request.created_at + 10.minutes).to_s).localtime.strftime('%Y/%m/%d %H:%M:%S')%>"></span></div>
                                           <% end %>
                                           <span class="message-count<%=request.id%> message-count">
                                             <% if request.user_id == current_user.id %>
