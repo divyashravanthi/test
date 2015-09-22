@@ -63,7 +63,7 @@
                                           <% if request.is_expired %>
                                             <div class="lv-small">Expired</div>
                                           <% else %>
-                                            <div class="lv-small"><div data-countdown="2016/01/01"></div></div>
+                                            <div class="lv-small"><span data-countdown="<%=Time.parse((request.created_at + 10.minutes).to_s).strftime('%Y/%m/%d %H:%M:%S')%>"></span></div>
                                           <% end %>
                                           <span class="message-count<%=request.id%> message-count">
                                             <% if request.user_id == current_user.id %>
@@ -91,7 +91,7 @@
                                           <% if request.is_expired %>
                                             <div class="lv-small">Expired</div>
                                           <% else %>
-                                            <div class="lv-small"><div data-countdown="2016/01/01"></div></div>
+                                            <div class="lv-small"><span data-countdown="<%=Time.parse((request.created_at + 10.minutes).to_s).strftime('%Y/%m/%d %H:%M:%S')%>"></span></div>
                                           <% end %>
                                           <span class="message-count<%=request.id%> message-count">
                                             <% if request.user_id == current_user.id %>
@@ -460,12 +460,16 @@ $(".btn-title-save").click(function(){
     alert("Invalid operation");
   }
 });
-  $('[data-countdown]').each(function() {
-   var $this = $(this), finalDate = $(this).data('countdown');
-   $this.countdown(finalDate, function(event) {
-     $this.html(event.strftime('%D days %H:%M:%S'));
-   });
- });
+  $('[data-countdown]').each(function(k,v) {
+        var finalDate = $(v).data('countdown');
+        console.log(v);
+        console.log(finalDate);
+    $(v).countdown(finalDate)
+      .on('update.countdown', function(event) {
+        var format = '%M:%S';
+        $(v).html("Expires in " + event.strftime(format));
+      })
+  });
 
 
 }); 
