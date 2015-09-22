@@ -102,6 +102,12 @@ table.dataTable th{
 .closed-thread-body{
   padding-left: 0 !important;
 }
+.ms-menu{
+  overflow: scroll;
+}
+.gray-font{
+  color: gray !important;
+}
 /*body{
 	background-color: #E96D65 !important;
 	color: #ffe8e7 !important;

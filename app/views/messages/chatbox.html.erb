@@ -58,7 +58,15 @@
                                         <div class="lv-avatar bgm-red pull-left"><%=User.find(request.receiver_id).name.first%></div>
                                       <% end %>
                                       <div class="media-body">
-                                          <div class="lv-title"><%=User.find(request.receiver_id).name%></div>
+                                          <div class="lv-title">
+                                            <% if request.status == "Sent" %>
+                                            <div class="gray-font">
+                                              <%=User.find(request.receiver_id).name%>
+                                            </div>
+                                            <% else %>
+                                              <%=User.find(request.receiver_id).name%>
+                                            <% end %>
+                                            </div>
                                           <% if request.is_expired %>
                                             <div class="lv-small">Expired</div>
                                           <% else %>
@@ -85,7 +93,16 @@
                                         <div class="lv-avatar bgm-red pull-left"><%=User.find(request.receiver_id).name.first%></div>
                                       <% end %>
                                       <div class="media-body">
-                                          <div class="lv-title"><%=request.user.name%></div>
+                                        
+                                          <div class="lv-title">
+                                            <% if request.status == "Sent" %>
+                                            <div class="gray-font">
+                                              <%=request.user.name%>
+                                            </div>
+                                            <% else %>
+                                              <%=request.user.name%>
+                                            <% end %>
+                                          </div>
                                           <div class="lv-small"><%=request.user.email%></div>
                                           <% if request.is_expired %>
                                             <div class="lv-small">Expired</div>
@@ -337,7 +354,7 @@ $(document).ready(function(){
   $('[data-countdown]').each(function(k,v) {
     var finalDate = $(v).data('countdown');
     $(v).countdown(finalDate, function(event) {
-     $(this).text(
+     $(this).text("Expires in : "+
        event.strftime('%M:%S')
      );
    });
