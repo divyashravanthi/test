@@ -32,6 +32,7 @@ Rails.application.routes.draw do
   get 'search_coaches/:type/:term' => 'users#coach_search', as: :coach_search
   get 'published_messages' => 'requests#published_messages'
   get 'archived_messages' => 'requests#archived_messages'
+  get 'read-message/:id' => 'messages#change_status'
 
   post '/new-message' => 'messages#new_message', as: :new_message
 

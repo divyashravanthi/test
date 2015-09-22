@@ -1,4 +1,5 @@
 class MessagesController < ApplicationController
+	skip_before_filter :verify_authenticity_token
 	def create
 	end
 
@@ -57,7 +58,7 @@ class MessagesController < ApplicationController
 
 	def new_message
 		@req = Request.find(params[:request_id])
-		if @req.user.id == params[:sender_id]
+		if @req.user.id == params[:sender_id].to_i
 			@receiver_id = @req.receiver_id
 		else
 			@receiver_id = @req.user.id
@@ -72,5 +73,15 @@ class MessagesController < ApplicationController
 	def get_messages
 		@messages = Request.find(params[:id]).messages
 		render :json => @messages.to_json(methods: :sender_name)
+	end
+
+	def change_status
+		# @req = Request.find(params[:id])
+		@messages = Request.find(params[:id]).messages.where(:receiver_id => current_user.id)
+		@messages.each do |m|
+			m.read_status = true
+			m.save
+		end
+		render :text => "Success"
 	end
 end

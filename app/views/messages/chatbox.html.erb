@@ -59,6 +59,17 @@
                                     <div class="media-body">
                                         <div class="lv-title"><%=User.find(request.receiver_id).name%></div>
                                         <div class="lv-small"><%=User.find(request.receiver_id).email%></div>
+                                        <span class="message-count<%=request.id%> message-count">
+                                          <% if request.user_id == current_user.id %>
+                                            <% if request.sender_unread_count > 0 %>
+                                              <%= request.sender_unread_count %>
+                                            <% end %>
+                                          <% else %>
+                                            <% if request.receiver_unread_count > 0 %>
+                                              <%= request.receiver_unread_count %>
+                                            <% end %>
+                                          <% end %>
+                                        </span>
                                     </div>
                                   <% else %>
                                     <% if request.user.avatar.url.present? %>
@@ -71,6 +82,17 @@
                                     <div class="media-body">
                                         <div class="lv-title"><%=request.user.name%></div>
                                         <div class="lv-small"><%=request.user.email%></div>
+                                        <span class="message-count<%=request.id%> message-count">
+                                          <% if request.user_id == current_user.id %>
+                                          <% if request.sender_unread_count > 0 %>
+                                            <%= request.sender_unread_count %>
+                                            <% end %>
+                                          <% else %>
+                                          <% if request.receiver_unread_count > 0 %>
+                                            <%= request.receiver_unread_count %>
+                                            <% end %>
+                                          <% end %>
+                                        </span>
                                     </div>
                                   <% end %>
                                 </a>
@@ -270,15 +292,27 @@ function terminate_session(){
   }
 $(document).ready(function(){
   $(".option-btns").click(function(e){
-  e.preventDefault();
-  console.log("dsdd");
-  console.log($("#titleModal"));
-  jQuery("#titlemodal").modal("show");
-  option_id = $(this).data('value');
-});
+    e.preventDefault();
+    console.log("dsdd");
+    console.log($("#titleModal"));
+    jQuery("#titlemodal").modal("show");
+    option_id = $(this).data('value');
+  });
+
+  
 
   var user_flag = 0;
   $('.lv-body').scrollTop($('.lv-body')[0].scrollHeight);
+
+  //Change message read status
+  $.ajax({
+    url: "/read-message/<%=@request.id%>",
+    success: function(){
+      console.log("Request sent");
+      $(".message-count-main").html("<%=current_user.unread_messages_count%>");
+    }
+  });
+
   //Subscribe to the channel
 	var public_subscription = client.subscribe("/messages/<%=@request.id%>", function(data) {
       if(data.signal == "typing" && user_flag == 0){
@@ -364,6 +398,8 @@ $(".btn-title-save").click(function(){
     alert("Invalid operation");
   }
 });
+
+
 
 });
 </script>

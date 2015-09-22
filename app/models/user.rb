@@ -24,4 +24,12 @@ class User < ActiveRecord::Base
     options.merge!(:methods => [:online])
     super(options)
   end
+
+  def unread_messages_count
+    Message.where(:receiver_id=> self.id, :read_status => false).count
+  end
+
+  def pending_requests_count
+    Request.where(:receiver_id => self.id, :status => "Sent").count
+  end
 end
