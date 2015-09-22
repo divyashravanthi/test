@@ -59,13 +59,11 @@
                                       <% end %>
                                       <div class="media-body">
                                           <div class="lv-title"><%=User.find(request.receiver_id).name%></div>
-                                          <div class="lv-small">
                                           <% if request.is_expired %>
                                             <div class="lv-small">Expired</div>
                                           <% else %>
-                                            <div class="lv-small"><span data-countdown="<%=Time.parse((request.created_at + 10.minutes).to_s).strftime('%Y/%m/%d %H:%M:%S')%>"></span></div>
+                                            <div class="lv-small"><span data-countdown="<%=Time.zone.parse((request.created_at + 10.minutes).to_s).strftime('%Y/%m/%d %H:%M:%S')%>"></span></div>
                                           <% end %>
-                                          </div>
                                           <span class="message-count<%=request.id%> message-count">
                                             <% if request.user_id == current_user.id %>
                                               <% if request.sender_unread_count > 0 %>
@@ -92,7 +90,7 @@
                                           <% if request.is_expired %>
                                             <div class="lv-small">Expired</div>
                                           <% else %>
-                                            <div class="lv-small"><span data-countdown="<%=Time.parse((request.created_at + 10.minutes).to_s).strftime('%Y/%m/%d %H:%M:%S')%>"></span></div>
+                                            <div class="lv-small"><span data-countdown="<%=Time.zone.parse((request.created_at + 10.minutes).to_s).strftime('%Y/%m/%d %H:%M:%S')%>"></span></div>
                                           <% end %>
                                           <span class="message-count<%=request.id%> message-count">
                                             <% if request.user_id == current_user.id %>
@@ -335,11 +333,15 @@ function terminate_session(){
     });
   }
 $(document).ready(function(){
-  $(".ms-user").countdown("2016/01/01", function(event) {
+  
+  $('[data-countdown]').each(function(k,v) {
+    var finalDate = $(v).data('countdown');
+    $(v).countdown(finalDate, function(event) {
      $(this).text(
-       event.strftime('%D days %H:%M:%S')
+       event.strftime('%M:%S')
      );
    });
+  });
   $(".option-btns").click(function(e){
     e.preventDefault();
     console.log("dsdd");
@@ -447,15 +449,6 @@ $(".btn-title-save").click(function(){
     alert("Invalid operation");
   }
 });
-  $('[data-countdown]').each(function(k,v) {
-        var finalDate = $(v).data('countdown');
-        console.log(v);
-        console.log(finalDate);
-    $(v).countdown(finalDate)
-      .on('update.countdown', function(event) {
-        var format = '%M:%S';
-        $(v).html("Expires in " + event.strftime(format));
-      })
-  });
+  
 });
 </script>
