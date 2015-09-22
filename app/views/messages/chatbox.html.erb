@@ -47,55 +47,117 @@
                                <% else %>
                                 <div class="lv-item media">
                                <% end %>
-                               <a href = "/message/<%=request.id%>">
-                                  <% if @client %>
-                                    <% if User.find(request.receiver_id).avatar.url.present? %>
-                                      <div class="lv-avatar pull-left">
-                                        <img src="<%=User.find(request.receiver_id).avatar.url%>" alt="">
+                               <% if (Time.now <= (request.created_at + 10.minutes) && request.status = "Sent") || request.is_expired %>
+                                <a href = "#" class="disable">
+                                    <% if @client %>
+                                      <% if User.find(request.receiver_id).avatar.url.present? %>
+                                        <div class="lv-avatar pull-left">
+                                          <img src="<%=User.find(request.receiver_id).avatar.url%>" alt="">
+                                        </div>
+                                      <%else %>
+                                        <div class="lv-avatar bgm-red pull-left"><%=User.find(request.receiver_id).name.first%></div>
+                                      <% end %>
+                                      <div class="media-body">
+                                          <div class="lv-title"><%=User.find(request.receiver_id).name%></div>
+                                          <div class="lv-small"><%=User.find(request.receiver_id).email%></div>
+                                          <% if request.is_expired %>
+                                            <div class="lv-small">Expired</div>
+                                          <% else %>
+                                            <div class="lv-small"><div data-countdown="2016/01/01"></div></div>
+                                          <% end %>
+                                          <span class="message-count<%=request.id%> message-count">
+                                            <% if request.user_id == current_user.id %>
+                                              <% if request.sender_unread_count > 0 %>
+                                                <%= request.sender_unread_count %>
+                                              <% end %>
+                                            <% else %>
+                                              <% if request.receiver_unread_count > 0 %>
+                                                <%= request.receiver_unread_count %>
+                                              <% end %>
+                                            <% end %>
+                                          </span>
                                       </div>
-                                    <%else %>
-                                      <div class="lv-avatar bgm-red pull-left"><%=User.find(request.receiver_id).name.first%></div>
-                                    <% end %>
-                                    <div class="media-body">
-                                        <div class="lv-title"><%=User.find(request.receiver_id).name%></div>
-                                        <div class="lv-small"><%=User.find(request.receiver_id).email%></div>
-                                        <span class="message-count<%=request.id%> message-count">
-                                          <% if request.user_id == current_user.id %>
+                                    <% else %>
+                                      <% if request.user.avatar.url.present? %>
+                                        <div class="lv-avatar pull-left">
+                                          <img src="<%=request.user.avatar.url%>" alt="">
+                                        </div>
+                                      <%else %>
+                                        <div class="lv-avatar bgm-red pull-left"><%=User.find(request.receiver_id).name.first%></div>
+                                      <% end %>
+                                      <div class="media-body">
+                                          <div class="lv-title"><%=request.user.name%></div>
+                                          <div class="lv-small"><%=request.user.email%></div>
+                                          <% if request.is_expired %>
+                                            <div class="lv-small">Expired</div>
+                                          <% else %>
+                                            <div class="lv-small"><div data-countdown="2016/01/01"></div></div>
+                                          <% end %>
+                                          <span class="message-count<%=request.id%> message-count">
+                                            <% if request.user_id == current_user.id %>
                                             <% if request.sender_unread_count > 0 %>
                                               <%= request.sender_unread_count %>
-                                            <% end %>
-                                          <% else %>
+                                              <% end %>
+                                            <% else %>
                                             <% if request.receiver_unread_count > 0 %>
                                               <%= request.receiver_unread_count %>
+                                              <% end %>
                                             <% end %>
-                                          <% end %>
-                                        </span>
-                                    </div>
-                                  <% else %>
-                                    <% if request.user.avatar.url.present? %>
-                                      <div class="lv-avatar pull-left">
-                                        <img src="<%=request.user.avatar.url%>" alt="">
+                                          </span>
                                       </div>
-                                    <%else %>
-                                      <div class="lv-avatar bgm-red pull-left"><%=User.find(request.receiver_id).name.first%></div>
                                     <% end %>
-                                    <div class="media-body">
-                                        <div class="lv-title"><%=request.user.name%></div>
-                                        <div class="lv-small"><%=request.user.email%></div>
-                                        <span class="message-count<%=request.id%> message-count">
-                                          <% if request.user_id == current_user.id %>
-                                          <% if request.sender_unread_count > 0 %>
-                                            <%= request.sender_unread_count %>
+                                  </a>
+                               <% else %>
+                                 <a href = "/message/<%=request.id%>">
+                                    <% if @client %>
+                                      <% if User.find(request.receiver_id).avatar.url.present? %>
+                                        <div class="lv-avatar pull-left">
+                                          <img src="<%=User.find(request.receiver_id).avatar.url%>" alt="">
+                                        </div>
+                                      <%else %>
+                                        <div class="lv-avatar bgm-red pull-left"><%=User.find(request.receiver_id).name.first%></div>
+                                      <% end %>
+                                      <div class="media-body">
+                                          <div class="lv-title"><%=User.find(request.receiver_id).name%></div>
+                                          <div class="lv-small"><%=User.find(request.receiver_id).email%></div>
+                                          <span class="message-count<%=request.id%> message-count">
+                                            <% if request.user_id == current_user.id %>
+                                              <% if request.sender_unread_count > 0 %>
+                                                <%= request.sender_unread_count %>
+                                              <% end %>
+                                            <% else %>
+                                              <% if request.receiver_unread_count > 0 %>
+                                                <%= request.receiver_unread_count %>
+                                              <% end %>
                                             <% end %>
-                                          <% else %>
-                                          <% if request.receiver_unread_count > 0 %>
-                                            <%= request.receiver_unread_count %>
+                                          </span>
+                                      </div>
+                                    <% else %>
+                                      <% if request.user.avatar.url.present? %>
+                                        <div class="lv-avatar pull-left">
+                                          <img src="<%=request.user.avatar.url%>" alt="">
+                                        </div>
+                                      <%else %>
+                                        <div class="lv-avatar bgm-red pull-left"><%=User.find(request.receiver_id).name.first%></div>
+                                      <% end %>
+                                      <div class="media-body">
+                                          <div class="lv-title"><%=request.user.name%></div>
+                                          <div class="lv-small"><%=request.user.email%></div>
+                                          <span class="message-count<%=request.id%> message-count">
+                                            <% if request.user_id == current_user.id %>
+                                            <% if request.sender_unread_count > 0 %>
+                                              <%= request.sender_unread_count %>
+                                              <% end %>
+                                            <% else %>
+                                            <% if request.receiver_unread_count > 0 %>
+                                              <%= request.receiver_unread_count %>
+                                              <% end %>
                                             <% end %>
-                                          <% end %>
-                                        </span>
-                                    </div>
-                                  <% end %>
-                                </a>
+                                          </span>
+                                      </div>
+                                    <% end %>
+                                  </a>
+                                <% end %>
                                 </div>
                                 <% end %>
                             </div>
@@ -398,8 +460,13 @@ $(".btn-title-save").click(function(){
     alert("Invalid operation");
   }
 });
+  $('[data-countdown]').each(function() {
+   var $this = $(this), finalDate = $(this).data('countdown');
+   $this.countdown(finalDate, function(event) {
+     $this.html(event.strftime('%D days %H:%M:%S'));
+   });
+ });
 
 
-
-});
+}); 
 </script>

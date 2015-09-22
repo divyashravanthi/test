@@ -11,4 +11,11 @@ class Request < ActiveRecord::Base
   def receiver_unread_count
   	self.messages.where(:receiver_id => self.receiver_id, :read_status => false).count
   end
+
+  def mark_expired
+    if !self.is_expired && self.status = "Sent"
+      self.is_expired = true
+      self.save
+    end
+  end
 end

@@ -47,10 +47,10 @@ class MessagesController < ApplicationController
 			@request = Request.find(params[:id])
 			if current_user.role == "Client"
 				@client = true
-				@requests = current_user.requests.where(:status => ["Accepted", "Close_pending"])
+				@requests = current_user.requests.where(:status => ["Accepted", "Close_pending", "Sent"])
 			elsif current_user.role == "Coach"
 				@client = false
-				@requests = Request.where(:receiver_id => current_user.id, :status => ["Accepted", "Close_pending"])
+				@requests = Request.where(:receiver_id => current_user.id, :status => ["Accepted", "Close_pending", "Sent"])
 			end
 		end
 		# binding.pry

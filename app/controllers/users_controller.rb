@@ -77,11 +77,11 @@ class UsersController < ApplicationController
 	def messages
 		if current_user.role == "Client"
 			@client = true
-			@requests = current_user.requests.where(:status => ["Accepted", "Close_pending"])
+			@requests = current_user.requests.where(:status => ["Accepted", "Close_pending", "Sent"])
 			# binding.pry
 		elsif current_user.role == "Coach"
 			@client = false
-			@requests = Request.where(:receiver_id => current_user.id, :status => ["Accepted", "Close_pending"])
+			@requests = Request.where(:receiver_id => current_user.id, :status => ["Accepted", "Close_pending", "Sent"])
 		end
 		if @requests.count > 0
 			redirect_to "/message/#{@requests.first.id}"
