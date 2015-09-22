@@ -175,7 +175,7 @@
                                     </div>
                                     <% if current_user.role == "Coach" %>
                                     <ul class="lv-actions actions">
-                                        Publish
+                                        Terminate Session
                                         <li class="dropdown">
                                             <a href="" data-toggle="dropdown" aria-expanded="true">
                                                 <i class="zmdi zmdi-more-vert"></i>
@@ -301,31 +301,9 @@
                     </div>
                 </div>
             </section>
-        </section>
 
 
 
-<div class="chat_container">
-</div>
-<div id="wrapper">
-  <div class="session-status-container">
-    <% if @request.status == "Close_pending"%>
-      <% if current_user.role == "Coach" %>
-        The client has request for the session to be terminated. 
-        <button class="terminate-button btn btn-default">Click here</button>
-        <%#= link_to "Click here", closing_request_path(:id => @request.id) %>
-        Click here to terminate now!
-      <% elsif current_user.role == "Client" %>
-        Awaiting termination from the coach. 
-      <% end %>
-    <% elsif @request.status == "Closed" %>
-      This session has been archived, contact administrator if you'd like to restore! 
-    <% elsif @request.status != "Closed" && @request.status != "Close_pending" %>
-      Would you like to terminate the session? 
-      <button class="terminate-button btn btn-default">Yes</button>
-    <% end %>
-  </div>
-  
       
 
 <script type="text/javascript">

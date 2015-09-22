@@ -1,31 +1,125 @@
-<div class="chat_container">
-</div>
-<div id="wrapper">
-  <div class="session-status-container text-center">
-    <h3><%= @request.title %></h3>
-    Session owner: <%= @request.user.name %><br/>
-    Coach: <%= User.find(@request.receiver_id).name %><br/>
-  </div>
-  
-      <div class="message-container">
-        <br/>
-        <div class="message-north closed-thread">
-          
-          <div class="message-thread">
-            <% @request.messages.each do |m| %>
-            <% if current_user.name == m.sender_name %>
-              <div class="message bubble-right">
-            <% else %>
-              <div class="message bubble-left">
-            <% end %>
-                <label class="message-user"><%=m.sender_name%></label>
-                <label class="message-timestamp"><%=time_ago_in_words(m.created_at)%> ago</label>
-                <p><%=m.raw_text%></p>
-              </div>
-            <% end %>
-          </div>
-          
+<section id="content">
+    <div class="container">
+        <div class="block-header">
+            <h2>Active Chat Sessions</h2>
         </div>
-      </div>
-    </div>
+        <div class="card m-b-0" id="messages-main">
+            <a href="" class="btn bgm-red btn-float m-btn" id="ms-compose">
+                <i class="zmdi zmdi-plus"></i>
+            </a>
+            <div class="ms-body closed-thread-body">
+                <div class="listview lv-message">
+                    <div class="lv-header-alt clearfix">
+                        <div id="ms-menu-trigger">
+                            <div class="line-wrap">
+                                <div class="line top"></div>
+                                <div class="line center"></div>
+                                <div class="line bottom"></div>
+                            </div>
+                        </div>
+                        
 
+                        <div class="lvh-label hidden-xs">
+                            <div class="lv-avatar pull-left">
+                                <img alt="" src=
+                                <% if @request.user_id == current_user.id %>
+                                  "<%= User.find(@request.receiver_id).avatar.url %>"
+                                <% else %>
+                                  "<%= User.find(@request.user_id).avatar.url %>"
+                                <% end %>
+                                >
+                            </div>
+                            
+                            <span class="c-black">
+                              <% if @request.user_id == current_user.id %>
+                                <%= User.find(@request.receiver_id).name %>
+                              <% else %>
+                                <%= User.find(@request.user_id).name %>
+                              <% end %>
+                            </span>
+                            <span class="typing-sign"><i>Typing...</i></span>
+                        </div>
+                        
+                        <!-- <ul class="lv-actions actions">
+                            <li>
+                                <a href="">
+                                    <i class="zmdi zmdi-delete"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    <i class="zmdi zmdi-check"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    <i class="zmdi zmdi-time"></i>
+                                </a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="" data-toggle="dropdown" aria-expanded="true">
+                                    <i class="zmdi zmdi-sort"></i>
+                                </a>
+                    
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li>
+                                        <a href="">Latest</a>
+                                    </li>
+                                    <li>
+                                        <a href="">Oldest</a>
+                                    </li>
+                                </ul>
+                            </li>                             
+                            <li class="dropdown">
+                                <a href="" data-toggle="dropdown" aria-expanded="true">
+                                    <i class="zmdi zmdi-more-vert"></i>
+                                </a>
+                    
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li>
+                                        <a href="">Refresh</a>
+                                    </li>
+                                    <li>
+                                        <a href="">Message Settings</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul> -->
+                    </div>
+                    
+                    <div class="lv-body">   
+                    <% @request.messages.each do |m| %>
+                      <% if current_user.name == m.sender_name %>
+                        <div class="lv-item media right">
+                            <div class="lv-avatar pull-right">
+                                <img src="<%=User.find(m.sender_id).avatar.url%>" alt="">
+                            </div>
+                            <div class="media-body">
+                                <div class="ms-item">
+                                    <%=m.raw_text %>
+                                </div>
+                                <small class="ms-date"><i class="zmdi zmdi-access-time"></i> <%=time_ago_in_words(m.created_at)%> ago</small>
+                            </div>
+                        </div>
+                      <% else %>
+                        <div class="lv-item media">
+                            <div class="lv-avatar pull-left">
+                                <img src="<%=User.find(m.sender_id).avatar.url%>" alt="">
+                            </div>
+                            <div class="media-body">
+                                <div class="ms-item">
+                                    <%=m.raw_text %>
+                                </div>
+                                <small class="ms-date"><i class="zmdi zmdi-access-time"></i> <%=time_ago_in_words(m.created_at)%> ago</small>
+                            </div>
+                        </div>
+
+                      <% end %>
+                    <% end %>  
+                    </div>                               
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

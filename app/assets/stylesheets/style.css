@@ -8,7 +8,7 @@ body{
   margin-top: 17%;
 }*/
 .navbar .nav li {
-    width: 170px; /* or whatever width you want for items */
+    /*width: 170px;  or whatever width you want for items */
     display: inline-block;
     float: none;
     color: white;
@@ -63,10 +63,10 @@ body{
   font-size: 14px;
 }
 .green-font{
-  color: green;
+  color: green !important;
 }
 .red-font{
-  color: red;
+  color: red !important;
 }
 .nav > li > a{
   display: -webkit-inline-box;
@@ -86,6 +86,21 @@ a{
 }
 .tmn-counts{
     margin-right: -20px;
+}
+.dropdown-menu{
+  text-align: right;
+}
+#messages-main .ms-menu .lv-item {
+  border-top: 1px solid rgb(225, 227, 228);
+  }
+table.dataTable tbody tr{
+  text-align: center;
+}
+table.dataTable th{
+  text-align: center;
+}
+.closed-thread-body{
+  padding-left: 0 !important;
 }
 /*body{
 	background-color: #E96D65 !important;
