@@ -18,7 +18,7 @@
     var client;
     $(function() {
       // Setting up a global Faye client
-      client = new Faye.Client("http://#{ request.host }:9292/faye");
+      client = new Faye.Client("http://localhost:9292/faye");
     });
     $(document).ready(function(){
       <% if current_user.present? %>
